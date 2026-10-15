@@ -58,7 +58,19 @@ describe("PlaybackQueue", () => {
         await flush();
         expect(player.played).toEqual([1, 2]);
     });
+    it("reports playing id and waiting count through onChange", async () => {
+        const onChange = vi.fn();
+        const player = createFakePlayer();
+        const queue = new PlaybackQueue({ currentUserId: ME, player, onChange });
 
+        queue.enqueue(msg(1));
+        queue.enqueue(msg(2));
+        expect(onChange).toHaveBeenLastCalledWith({ playingId: 1, waiting: 1 });
+
+        player.finishCurrent();
+        await flush();
+        expect(onChange).toHaveBeenLastCalledWith({ playingId: 2, waiting: 0 });
+    });
     it("ignores my own messages", () => {
         const { player, queue } = setup();
         queue.enqueue(msg(1, 1, ME));
