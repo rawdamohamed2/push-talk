@@ -1,5 +1,7 @@
 import { describe, it, expect, vi } from "vitest";
-import { PlaybackQueue, type QueuedMessage } from "./playbackQueue";
+import {PlaybackQueue} from "@/lib/playbackQueue.ts";
+import type {QueuedMessage} from "@/types/playQueue.type.ts";
+
 
 const ME = 1;
 const msg = (id: number, seq = id, senderId = 2): QueuedMessage => ({ id, seq, senderId });
@@ -18,6 +20,8 @@ function createFakePlayer() {
                 rejecters.push(rej);
             });
         },
+        pause: vi.fn(),
+        resume: vi.fn(),
         finishCurrent: () => {
             rejecters.shift();
             resolvers.shift()?.();
@@ -40,6 +44,29 @@ describe("PlaybackQueue", () => {
         const { player, queue } = setup();
         queue.enqueue(msg(1));
         expect(player.played).toEqual([1]);
+    });
+
+    it("pauses the current audio when queue is paused", () => {
+        const { player, queue } = setup();
+        queue.enqueue(msg(1));
+        queue.pause();
+        expect(player.pause).toHaveBeenCalledTimes(1);
+    });
+
+    it("resumes the current audio instead of starting a new one", () => {
+        const { player, queue } = setup();
+        queue.enqueue(msg(1));
+        queue.enqueue(msg(2));
+        queue.pause();
+        queue.resume();
+        expect(player.resume).toHaveBeenCalledTimes(1);
+        expect(player.played).toEqual([1]);
+    });
+
+    it("does not call player.pause when nothing is playing", () => {
+        const { player, queue } = setup();
+        queue.pause();
+        expect(player.pause).not.toHaveBeenCalled();
     });
 
     it("never plays two messages at the same time", () => {

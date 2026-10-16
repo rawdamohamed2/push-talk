@@ -1,23 +1,5 @@
-import type { Message } from "../types";
+import type {Options, QueuedMessage} from "@/types/playQueue.type.ts";
 
-export type QueuedMessage = Pick<Message, "id" | "seq" | "senderId">;
-
-export interface AudioPlayer {
-    play(message: QueuedMessage): Promise<void>;
-}
-
-export interface QueueState {
-    playingId: number | null;
-    waiting: number;
-}
-
-interface Options {
-    currentUserId: number;
-    player: AudioPlayer;
-    onPlayed?: (message: QueuedMessage) => void;
-    onError?: (message: QueuedMessage, error: unknown) => void;
-    onChange?: (state: QueueState) => void;
-}
 export class PlaybackQueue {
     private pending: QueuedMessage[] = [];
     private seen = new Set<number>();
@@ -44,11 +26,21 @@ export class PlaybackQueue {
 
     pause(): void {
         this.isPaused = true;
+        if (this.isPlaying) this.options.player.pause();
     }
 
     resume(): void {
         this.isPaused = false;
-        void this.playNext();
+        if (this.isPlaying) {
+            this.options.player.resume();
+        } else {
+            void this.playNext();
+        }
+    }
+
+    clear(): void {
+        this.pending = [];
+        this.emit();
     }
 
     get size(): number {
