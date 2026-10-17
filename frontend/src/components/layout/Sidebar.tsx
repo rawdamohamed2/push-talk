@@ -58,10 +58,15 @@ export function AppSidebar() {
             {myChannels.map((c) => (
               <SidebarMenuItem
                 key={c.id}
-                className={`bg-sidebar-accent px-2 rounded-md text-secondary`}
+                className={`bg-sidebar-accent px-2 rounded-md `}
               >
                 <SidebarMenuButton>
-                  <NavLink to={`/channels/${c.id}`}># {c.name}</NavLink>
+                  <NavLink
+                    to={`/channels/${c.id}`}
+                    className={`text-sidebar-accent-foreground hover:text-secondary`}
+                  >
+                    # {c.name}
+                  </NavLink>
                 </SidebarMenuButton>
               </SidebarMenuItem>
             ))}

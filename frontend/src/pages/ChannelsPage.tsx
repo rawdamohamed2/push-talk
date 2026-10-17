@@ -2,7 +2,7 @@ import ChannelHeading from "@/components/channels/ChannelHeading.tsx";
 import { SearchInput } from "@/components/channels/SearchInput.tsx";
 import { useState } from "react";
 import { mockChannels } from "@/mocks/data.ts";
-import ChannelDialog from "@/components/channels/ChannelDialog.tsx";
+import NewChannelDialog from "@/components/channels/NewChannelDialog.tsx";
 import ChannelCard from "@/components/channels/ChannelCard.tsx";
 import EmptyState from "@/components/channels/EmptyState.tsx";
 
@@ -23,11 +23,11 @@ const ChannelsPage = () => {
           <SearchInput value={query} onChange={setQuery} />
         </div>
         <div className="md:col-span-1 col-span-1 w-full">
-          <ChannelDialog />
+          <NewChannelDialog />
         </div>
       </div>
 
-      {visible.length !== 0 ? (
+      {visible.length === 0 ? (
         <EmptyState />
       ) : (
         <div className="grid xl:grid-cols-2 grid-cols-1 my-10 gap-4 items-center">

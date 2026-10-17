@@ -11,7 +11,7 @@ import { Button } from "@base-ui/react/button";
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { InputGroup, InputGroupInput } from "@/components/ui/input-group.tsx";
 
-const ChannelDialog = () => {
+const NewChannelDialog = () => {
   return (
     <Dialog>
       <DialogTrigger
@@ -56,4 +56,4 @@ const ChannelDialog = () => {
     </Dialog>
   );
 };
-export default ChannelDialog;
+export default NewChannelDialog;
