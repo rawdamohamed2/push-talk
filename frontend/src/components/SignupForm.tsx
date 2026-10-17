@@ -14,7 +14,7 @@ import {
 import { ArrowRight, Lock, SquareUserRound } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox.tsx";
 import { Button } from "@/components/ui/button.tsx";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import type { signUpData } from "@/types/auth.type.ts";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -33,10 +33,12 @@ const SignupForm = () => {
     mode: "onChange",
     criteriaMode: "all",
   });
+  const navigate = useNavigate();
   const password = watch("password", "");
   const { level } = getPasswordStrength(password);
 
   const onSubmit = ({ username, password }: SignupValues) => {
+    navigate("/channels");
     console.log(username, password);
   };
   return (

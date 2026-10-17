@@ -14,13 +14,14 @@ import {
 import { ArrowRight, AtSign, Lock } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox.tsx";
 import { Button } from "@/components/ui/button.tsx";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import type { loginData } from "@/types/auth.type.ts";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema } from "@/schemas/auth.schema.ts";
 
 const LoginForm = () => {
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -31,7 +32,10 @@ const LoginForm = () => {
     criteriaMode: "all",
   });
 
-  const onSubmit = (data: loginData) => console.log(data.username);
+  const onSubmit = (data: loginData) => {
+    console.log(data.username);
+    navigate("/channels");
+  };
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
