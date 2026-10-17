@@ -1,5 +1,5 @@
 import LoginForm from "@/components/LoginForm.tsx";
-import FromHeading from "@/components/shared/FromHeading.tsx";
+import FormHeading from "@/components/shared/FormHeading.tsx";
 
 const Login = () => {
   return (
@@ -7,7 +7,7 @@ const Login = () => {
       <div
         className={"container flex flex-col justify-center items-center gap-4"}
       >
-        <FromHeading />
+        <FormHeading />
         <LoginForm />
       </div>
     </main>

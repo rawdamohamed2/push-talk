@@ -1,6 +1,6 @@
 import logo from "@/assets/screen.webp";
 
-const FromHeading = () => {
+const FormHeading = () => {
   return (
     <section
       className="
@@ -35,4 +35,4 @@ const FromHeading = () => {
   );
 };
 
-export default FromHeading;
+export default FormHeading;

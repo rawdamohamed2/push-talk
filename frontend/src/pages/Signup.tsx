@@ -1,4 +1,4 @@
-import FromHeading from "@/components/shared/FromHeading.tsx";
+import FormHeading from "@/components/shared/FormHeading.tsx";
 import SignupForm from "@/components/SignupForm.tsx";
 
 const Signup = () => {
@@ -7,7 +7,7 @@ const Signup = () => {
       <div
         className={"container flex flex-col justify-center items-center gap-4"}
       >
-        <FromHeading />
+        <FormHeading />
         <SignupForm />
       </div>
     </main>
