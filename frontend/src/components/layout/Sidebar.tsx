@@ -14,7 +14,7 @@ import { mockChannels, mockCurrentUser } from "@/mocks/data.ts";
 import logo from "@/assets/logo.webp";
 import { Button } from "@/components/ui/button.tsx";
 import { LogOut } from "lucide-react";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar.tsx";
+import UserAvater from "@/components/shared/UserAvater.tsx";
 
 export function AppSidebar() {
   const navigate = useNavigate();
@@ -78,11 +78,7 @@ export function AppSidebar() {
         <div
           className={`bg-muted flex items-center gap-2 py-2 px-3 rounded-4xl`}
         >
-          <Avatar className={`border border-muted-foreground`}>
-            <AvatarFallback className={`uppercase`}>
-              {mockCurrentUser.username.slice(0, 2)}
-            </AvatarFallback>
-          </Avatar>
+          <UserAvater />
           <span>{mockCurrentUser.username}</span>
         </div>
         <Button

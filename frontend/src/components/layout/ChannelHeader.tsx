@@ -1,7 +1,7 @@
 import { SidebarTrigger } from "@/components/ui/sidebar.tsx";
 import { Separator } from "@/components/ui/separator.tsx";
 import UserAvater from "@/components/shared/UserAvater.tsx";
-import NotificationMenu from "@/components/channelsPage/NotificationMenu.tsx";
+import NotificationMenu from "@/components/shared/NotificationMenu.tsx";
 
 const ChannelHeader = () => {
   return (
@@ -10,9 +10,12 @@ const ChannelHeader = () => {
         <p className={`font-semibold tracking-[-0.08px] leading-[24px]`}>
           Push<span className={`text-secondary`}>Talk</span>
         </p>
-        <Separator orientation="vertical" />
+        <Separator
+          orientation="vertical"
+          className={`md:inline-block hidden`}
+        />
         <p
-          className={`tracking-[0.06px] leading-[18px] text-[13px] text-muted-foreground`}
+          className={`md:inline-block hidden tracking-[0.06px] leading-[18px] text-[13px] text-muted-foreground`}
         >
           High-bandwidth collaborative voice & stream discussion
         </p>
