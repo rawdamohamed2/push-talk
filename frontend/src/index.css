@@ -148,6 +148,8 @@
   --color-accent-foreground: var(--on-surface);
   --color-accent: var(--surface-variant);
 
+  --color-inverse-surface: var(--inverse-surface);
+
   --color-ring: var(--surface-tint);
   --color-input: var(--surface-container-highest);
   --color-border: var(--outline-variant);

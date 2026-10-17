@@ -15,7 +15,7 @@ const ChannelDialog = () => {
   return (
     <Dialog>
       <DialogTrigger
-        className={`bg-primary-fixed-dim text-on-primary-container p-2 rounded-md font-semibold tracking-[-0.08px] leading-[24px] w-full`}
+        className={`bg-primary-fixed-dim text-on-primary-container p-2 rounded-md font-semibold tracking-[-0.08px] leading-[24px] w-full `}
       >
         + New Channel
       </DialogTrigger>
