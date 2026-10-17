@@ -1,1 +1,200 @@
+@import url("https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,100..900;1,100..900&display=swap");
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+@import "@fontsource-variable/geist";
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  /* Surface */
+  --surface: #10141a;
+  --surface-dim: #10141a;
+  --surface-bright: #353940;
+  --surface-container-lowest: #0a0e14;
+  --surface-container-low: #181c22;
+  --surface-container: #1c2026;
+  --surface-container-high: #262a31;
+  --surface-container-highest: #31353c;
+  --on-surface: #dfe2eb;
+  --on-surface-variant: #c7c4d7;
+  --inverse-surface: #dfe2eb;
+  --inverse-on-surface: #2d3137;
+  --surface-variant: #31353c;
+  --surface-tint: #c0c1ff;
+
+  /* Primary */
+  --primary: #c0c1ff;
+  --on-primary: #1000a9;
+  --primary-container: #8083ff;
+  --on-primary-container: #0d0096;
+  --inverse-primary: #494bd6;
+  --primary-fixed: #e1e0ff;
+  --primary-fixed-dim: #c0c1ff;
+  --on-primary-fixed: #07006c;
+  --on-primary-fixed-variant: #2f2ebe;
+
+  /* Secondary */
+  --secondary: #4cd7f6;
+  --on-secondary: #003640;
+  --secondary-container: #03b5d3;
+  --on-secondary-container: #00424e;
+  --secondary-fixed: #acedff;
+  --secondary-fixed-dim: #4cd7f6;
+  --on-secondary-fixed: #001f26;
+  --on-secondary-fixed-variant: #004e5c;
+
+  /* Tertiary */
+  --tertiary: #d0bcff;
+  --on-tertiary: #3c0091;
+  --tertiary-container: #a078ff;
+  --on-tertiary-container: #340080;
+  --tertiary-fixed: #e9ddff;
+  --tertiary-fixed-dim: #d0bcff;
+  --on-tertiary-fixed: #23005c;
+  --on-tertiary-fixed-variant: #5516be;
+
+  /* Error */
+  --error: #ffb4ab;
+  --on-error: #690005;
+  --error-container: #93000a;
+  --on-error-container: #ffdad6;
+
+  /* Background */
+  --background: #10141a;
+  --on-background: #dfe2eb;
+
+  /* Outline */
+  --outline: #908fa0;
+  --outline-variant: #464554;
+
+  /* Font */
+  --font-sans: "Hanken Grotesk", sans-serif;
+
+  /* Radius */
+  --radius: 0.75rem;
+}
+
+.dark {
+  --background: oklch(0.16 0.025 260);
+  --foreground: oklch(0.96 0.01 260);
+
+  --card: oklch(0.21 0.025 260);
+  --card-foreground: oklch(0.96 0.01 260);
+
+  --popover: oklch(0.21 0.025 260);
+  --popover-foreground: oklch(0.96 0.01 260);
+
+  --primary: oklch(0.59 0.23 277);
+  --primary-foreground: oklch(0.99 0 0);
+
+  --secondary: oklch(0.78 0.14 210);
+  --secondary-foreground: oklch(0.18 0.03 250);
+
+  --muted: oklch(0.25 0.025 260);
+  --muted-foreground: oklch(0.72 0.025 260);
+
+  --accent: oklch(0.29 0.07 277);
+  --accent-foreground: oklch(0.92 0.04 277);
+
+  --destructive: oklch(0.7 0.19 25);
+
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 12%);
+  --ring: oklch(0.65 0.2 277);
+
+  --chart-1: oklch(0.59 0.23 277);
+  --chart-2: oklch(0.78 0.14 210);
+  --chart-3: oklch(0.68 0.19 300);
+  --chart-4: oklch(0.7 0.15 160);
+  --chart-5: oklch(0.65 0.22 25);
+
+  --sidebar: oklch(0.13 0.025 260);
+  --sidebar-foreground: oklch(0.92 0.01 260);
+  --sidebar-primary: oklch(0.59 0.23 277);
+  --sidebar-primary-foreground: oklch(0.99 0 0);
+  --sidebar-accent: oklch(0.23 0.04 277);
+  --sidebar-accent-foreground: oklch(0.96 0.02 277);
+  --sidebar-border: oklch(1 0 0 / 8%);
+  --sidebar-ring: oklch(0.65 0.2 277);
+}
+
+@theme inline {
+  --font-heading: var(--font-sans);
+  --font-sans: "Hanken Grotesk", sans-serif;
+
+  --color-foreground: var(--on-surface);
+  --color-background: var(--background);
+
+  --color-card-foreground: var(--on-surface);
+  --color-card: var(--surface-container);
+
+  --color-popover-foreground: var(--on-surface);
+  --color-popover: var(--surface-container-high);
+
+  --color-primary-foreground: var(--on-primary);
+  --color-primary: var(--primary);
+
+  --color-primary-container: var(--primary-container);
+  --color-on-primary-container: var(--on-primary-container);
+
+  --color-secondary-foreground: var(--on-secondary);
+  --color-secondary: var(--secondary);
+
+  --color-muted-foreground: var(--on-surface-variant);
+  --color-muted: var(--surface-container-low);
+
+  --color-accent-foreground: var(--on-surface);
+  --color-accent: var(--surface-variant);
+
+  --color-ring: var(--surface-tint);
+  --color-input: var(--surface-container-highest);
+  --color-border: var(--outline-variant);
+  --color-destructive: var(--error-container);
+
+  --color-sidebar: var(--surface);
+  --color-sidebar-ring: var(--surface-tint);
+  --color-sidebar-border: var(--outline-variant);
+  --color-sidebar-accent-foreground: var(--on-surface);
+  --color-sidebar-accent: var(--surface-container-high);
+  --color-sidebar-primary-foreground: var(--on-primary);
+  --color-sidebar-primary: var(--primary);
+  --color-sidebar-foreground: var(--on-surface);
+
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+
+  --color-chart-5: var(--tertiary-container);
+  --color-chart-4: var(--secondary-container);
+  --color-chart-3: var(--tertiary);
+  --color-chart-2: var(--secondary);
+  --color-chart-1: var(--primary);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  html {
+    @apply font-sans;
+  }
+}
+
+.from-label {
+  @apply uppercase text-xs font-semibold leading-[14px] tracking-[0.55px];
+}
+.container{
+    @apply max-w-7xl mx-auto min-h-dvh sm:p-10 p-5 ;
+}
+Link,
+Button {
+  @apply cursor-pointer;
+}
