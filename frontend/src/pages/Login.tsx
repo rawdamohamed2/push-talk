@@ -1,5 +1,5 @@
-import LoginForm from "@/components/LoginForm.tsx";
-import FormHeading from "@/components/shared/FormHeading.tsx";
+import LoginForm from "@/components/auth/LoginForm.tsx";
+import FormHeading from "@/components/auth/FormHeading.tsx";
 
 const Login = () => {
   return (

@@ -1,5 +1,5 @@
-import FormHeading from "@/components/shared/FormHeading.tsx";
-import SignupForm from "@/components/SignupForm.tsx";
+import FormHeading from "@/components/auth/FormHeading.tsx";
+import SignupForm from "@/components/auth/SignupForm.tsx";
 
 const Signup = () => {
   return (
