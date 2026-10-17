@@ -137,6 +137,7 @@
 
   --color-primary-container: var(--primary-container);
   --color-on-primary-container: var(--on-primary-container);
+  --color-primary-fixed-dim: var(--primary-fixed-dim);
 
   --color-secondary-foreground: var(--on-secondary);
   --color-secondary: var(--secondary);
@@ -152,7 +153,9 @@
   --color-border: var(--outline-variant);
   --color-destructive: var(--error-container);
 
-  --color-sidebar: var(--surface);
+  --color-surface-container-lowest: var(--surface-container-lowest);
+
+  --color-sidebar: var(--surface-container);
   --color-sidebar-ring: var(--surface-tint);
   --color-sidebar-border: var(--outline-variant);
   --color-sidebar-accent-foreground: var(--on-surface);
@@ -191,8 +194,8 @@
 .from-label {
   @apply uppercase text-xs font-semibold leading-[14px] tracking-[0.55px];
 }
-.container{
-    @apply max-w-7xl mx-auto min-h-dvh sm:p-10 p-5 ;
+.container {
+  @apply max-w-7xl mx-auto sm:px-10 px-5;
 }
 Link,
 Button {

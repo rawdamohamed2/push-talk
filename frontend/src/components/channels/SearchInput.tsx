@@ -1,51 +1,36 @@
-import { Field, FieldLabel } from "@/components/ui/field.tsx";
+import { Search } from "lucide-react";
+import { Field } from "@/components/ui/field.tsx";
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupInput,
 } from "@/components/ui/input-group.tsx";
-import { Search } from "lucide-react";
-import { useForm } from "react-hook-form";
-import type { signUpData } from "@/types/auth.type.ts";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { signupSchema, type SignupValues } from "@/schemas/auth.schema.ts";
-import { useNavigate } from "react-router-dom";
-import { getPasswordStrength } from "@/lib/passwordStrength.ts";
 
-const SearchForm = () => {
-  const {
-    register,
-    handleSubmit,
-    watch,
-    formState: { errors, isSubmitting },
-  } = useForm<signUpData>({
-    resolver: zodResolver(signupSchema),
-    mode: "onChange",
-    criteriaMode: "all",
-  });
-  const navigate = useNavigate();
-  const password = watch("password", "");
-  const { level } = getPasswordStrength(password);
+interface SearchInputProps {
+  value: string;
+  onChange: (value: string) => void;
+  placeholder?: string;
+}
 
-  const onSubmit = ({ username, password }: SignupValues) => {
-    console.log(username, password);
-  };
+export function SearchInput({
+  value,
+  onChange,
+  placeholder = "Search channels...",
+}: SearchInputProps) {
   return (
-    <form onSubmit={onSubmit}>
-      <Field>
-        <InputGroup>
-          <InputGroupInput
-            type={"text"}
-            aria-label={"Search channels"}
-            {...register("")}
-            placeholder={"Search channels, tags, or kHz..."}
-          />
-          <InputGroupAddon>
-            <Search />
-          </InputGroupAddon>
-        </InputGroup>
-      </Field>
-    </form>
+    <Field>
+      <InputGroup>
+        <InputGroupInput
+          type="search"
+          aria-label="Search channels"
+          placeholder={placeholder}
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+        />
+        <InputGroupAddon>
+          <Search />
+        </InputGroupAddon>
+      </InputGroup>
+    </Field>
   );
-};
-export default SearchForm;
+}
