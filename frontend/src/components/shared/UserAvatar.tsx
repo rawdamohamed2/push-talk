@@ -1,7 +1,7 @@
 import { Avatar, AvatarFallback } from "@/components/ui/avatar.tsx";
 import { mockCurrentUser } from "@/mocks/data.ts";
 
-const UserAvater = () => {
+const UserAvatar = () => {
   return (
     <Avatar className={`border border-muted-foreground`}>
       <AvatarFallback className={`uppercase`}>
@@ -10,4 +10,4 @@ const UserAvater = () => {
     </Avatar>
   );
 };
-export default UserAvater;
+export default UserAvatar;
