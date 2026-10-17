@@ -140,6 +140,10 @@
   --color-primary-container: var(--primary-container);
   --color-on-primary-container: var(--on-primary-container);
   --color-primary-fixed-dim: var(--primary-fixed-dim);
+  --color-primary-fixed: var(--primary-fixed);
+  --color-inverse-primary: var(--inverse-primary);
+  --color-on-primary-fixed: var(--on-primary-fixed);
+  --color-on-primary-fixed-variant: var(--on-primary-fixed-variant);
 
   --color-secondary-foreground: var(--on-secondary);
   --color-secondary: var(--secondary);
@@ -157,8 +161,16 @@
   --color-border: var(--outline-variant);
   --color-destructive: var(--error-container);
 
+  --color-error: var(--error);
+  --color-on-error: var(--on-error);
+  --color-error-container: var(--error-container);
+  --color-on-error-container: var(--on-error-container);
+
   --color-surface-container-lowest: var(--surface-container-lowest);
-  --color-surface-bright: #353940;
+  --color-surface-bright: var(--surface-bright);
+  --color-secondary-fixed-dim: var(--secondary-fixed-dim);
+  --color-inverse-on-surface: var(--inverse-on-surface);
+  --color-outline: var(--outline);
 
   --color-sidebar: var(--surface-container);
   --color-sidebar-ring: var(--surface-tint);
@@ -201,7 +213,7 @@
   @apply uppercase text-xs font-semibold leading-[14px] tracking-[0.55px];
 }
 .container {
-  @apply max-w-7xl mx-auto sm:px-10 px-5;
+  @apply max-w-7xl mx-auto md:px-0 sm:px-5 px-10 ;
 }
 .font-heading {
   @apply font-heading;

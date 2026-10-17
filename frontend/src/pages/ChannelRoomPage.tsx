@@ -1,11 +1,20 @@
 import { useParams } from "react-router-dom";
 import RoomHeader from "@/components/channelRoomPage/roomHeader/RoomHeader.tsx";
-import { mockChannels, mockOnlineUserIds, mockUsers } from "@/mocks/data.ts";
+import {
+  mockChannels,
+  mockCurrentUser,
+  mockMessages,
+  mockOnlineUserIds,
+  mockUsers,
+} from "@/mocks/data.ts";
+import MessageList from "@/components/channelRoomPage/MessageList.tsx";
 
 const ChannelRoomPage = () => {
   const { channelId } = useParams();
   const channel = mockChannels.find((c) => c.id === Number(channelId));
-
+  const messages = mockMessages.filter(
+    (m) => m.channelId === Number(channelId),
+  );
   if (!channel)
     return (
       <section className={`min-h-dvh flex justify-center items-center`}>
@@ -16,13 +25,21 @@ const ChannelRoomPage = () => {
     );
 
   return (
-    <main className={`relative bg-sidebar min-h-dvh`}>
+    <main className={`relative bg-background`}>
       <RoomHeader
         channel={channel}
         members={mockUsers}
         onlineIds={mockOnlineUserIds}
         status="connected"
       />
+      <div className={`container`}>
+        <MessageList
+          messages={messages}
+          currentUserId={mockCurrentUser.id}
+          playingId={3}
+          progress={0.4}
+        />
+      </div>
     </main>
   );
 };
