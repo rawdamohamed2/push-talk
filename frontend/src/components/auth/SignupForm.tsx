@@ -19,7 +19,7 @@ import { useForm } from "react-hook-form";
 import type { signUpData } from "@/types/auth.type.ts";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { signupSchema, type SignupValues } from "@/schemas/auth.schema.ts";
-import { PasswordRequirements } from "@/components/PasswordRequirements.tsx";
+import { PasswordRequirements } from "@/components/auth/PasswordRequirements.tsx";
 import { getPasswordStrength, STYLES } from "@/lib/passwordStrength.ts";
 
 const SignupForm = () => {

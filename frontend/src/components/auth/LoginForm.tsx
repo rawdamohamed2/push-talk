@@ -2,7 +2,7 @@ import {
   InputGroup,
   InputGroupAddon,
   InputGroupInput,
-} from "@/components/ui/input-group";
+} from "@/components/ui/input-group.tsx";
 import {
   Field,
   FieldContent,
@@ -10,7 +10,7 @@ import {
   FieldGroup,
   FieldLabel,
   FieldSeparator,
-} from "@/components/ui/field";
+} from "@/components/ui/field.tsx";
 import { ArrowRight, AtSign, Lock } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox.tsx";
 import { Button } from "@/components/ui/button.tsx";

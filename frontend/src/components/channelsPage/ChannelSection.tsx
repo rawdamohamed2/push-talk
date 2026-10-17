@@ -1,5 +1,5 @@
 import { Badge } from "@/components/ui/badge";
-const ChannelHeading = () => {
+const ChannelSection = () => {
   return (
     <section
       className={`bg-muted rounded-lg 
@@ -40,4 +40,4 @@ const ChannelHeading = () => {
     </section>
   );
 };
-export default ChannelHeading;
+export default ChannelSection;

@@ -15,7 +15,7 @@ interface SearchInputProps {
 export function SearchInput({
   value,
   onChange,
-  placeholder = "Search channels...",
+  placeholder = "Search channelsPage...",
 }: SearchInputProps) {
   return (
     <Field>
