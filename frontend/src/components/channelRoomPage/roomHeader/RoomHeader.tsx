@@ -18,8 +18,8 @@ const RoomHeader = ({
   status,
 }: RoomHeaderProps) => {
   return (
-    <section className={`drop-shadow-xl/20`}>
-      <div className={`px-3 py-2 bg-muted flex flex-col gap-3`}>
+    <section className={``}>
+      <div className={`px-3 py-2 flex flex-col gap-3 drop-shadow-md/10`}>
         <div className={`flex md:flex-row flex-col items-center gap-2`}>
           <div className={`flex items-center gap-2`}>
             <h2

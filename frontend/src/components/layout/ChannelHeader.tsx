@@ -1,11 +1,11 @@
 import { SidebarTrigger } from "@/components/ui/sidebar.tsx";
 import { Separator } from "@/components/ui/separator.tsx";
-import UserAvater from "@/components/shared/UserAvater.tsx";
+import UserAvatar from "@/components/shared/UserAvatar.tsx";
 import NotificationMenu from "@/components/shared/NotificationMenu.tsx";
 
 const ChannelHeader = () => {
   return (
-    <header className="flex justify-between py-4 items-center gap-2 border-b px-3">
+    <header className="bg-background/80 flex justify-between py-4 items-center gap-2 border-b px-3">
       <div className={`flex items-center gap-2`}>
         <p className={`font-semibold tracking-[-0.08px] leading-[24px]`}>
           Push<span className={`text-secondary`}>Talk</span>
@@ -23,7 +23,7 @@ const ChannelHeader = () => {
       <div className={`flex items-center gap-2`}>
         <NotificationMenu />
         <Separator orientation="vertical" className={`me-2`} />
-        <UserAvater />
+        <UserAvatar />
         <SidebarTrigger />
       </div>
     </header>
