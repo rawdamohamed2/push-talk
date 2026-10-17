@@ -52,6 +52,15 @@ describe("PlaybackQueue", () => {
         queue.pause();
         expect(player.pause).toHaveBeenCalledTimes(1);
     });
+    it("clears waiting messages", () => {
+        const { player, queue } = setup();
+        queue.enqueue(msg(1));
+        queue.enqueue(msg(2));
+        queue.enqueue(msg(3));
+        queue.clear();
+        expect(queue.size).toBe(0);
+        expect(player.played).toEqual([1]);
+    });
 
     it("resumes the current audio instead of starting a new one", () => {
         const { player, queue } = setup();
