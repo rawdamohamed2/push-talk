@@ -17,13 +17,13 @@ const ChannelsPage = () => {
   };
   return (
     <main>
-      <div className={`container mt-10`}>
+      <div className={`container mt-10 pb-5`}>
         <ChannelSection />
         <div className="grid xl:grid-cols-6 grid-cols-1 my-10 gap-4 items-center justify-center">
-          <div className="md:col-span-5 col-span-1">
+          <div className="xl:col-span-5 col-span-1">
             <SearchInput value={query} onChange={setQuery} />
           </div>
-          <div className="md:col-span-1 col-span-1 w-full">
+          <div className="xl:col-span-1 col-span-1 w-full ">
             <NewChannelDialog />
           </div>
         </div>

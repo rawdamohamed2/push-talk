@@ -15,6 +15,7 @@ import logo from "@/assets/logo.webp";
 import { Button } from "@/components/ui/button.tsx";
 import { LogOut } from "lucide-react";
 import UserAvatar from "@/components/shared/UserAvatar.tsx";
+import { Separator } from "@/components/ui/separator.tsx";
 
 export function AppSidebar() {
   const navigate = useNavigate();
@@ -46,8 +47,7 @@ export function AppSidebar() {
           </span>
         </div>
       </SidebarHeader>
-
-      <SidebarContent className={`mt-1`}>
+      <SidebarContent className={`mt-4`}>
         <SidebarGroup className={`gap-2`}>
           <SidebarGroupLabel
             className={`text-[11px] tracking-[0.55px] leading-[14px] font-semibold`}
@@ -71,6 +71,18 @@ export function AppSidebar() {
               </SidebarMenuItem>
             ))}
           </SidebarMenu>
+        </SidebarGroup>
+        <Separator orientation={"horizontal"} className={`my-4`} />
+        <SidebarGroup className={`flex-row items-center gap-2 px-4 my-2`}>
+          <NavLink
+            to={`/channels`}
+            className={`w-full text-center text-on-primary-fixed bg-primary-fixed-dim 
+                 hover:bg-primary-fixed-dim/80  hover:text-on-primary-container  
+                 rounded-md h-10 p-2
+              `}
+          >
+            Channels
+          </NavLink>
         </SidebarGroup>
       </SidebarContent>
 
