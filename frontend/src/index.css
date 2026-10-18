@@ -68,7 +68,11 @@
   /* Outline */
   --outline: #908fa0;
   --outline-variant: #464554;
+
   --box-shadow: 0 0 5px 10px rgba(0, 0, 0, 1);
+  --box-shadow-1: 0 0 40px rgba(93, 223, 253, 0.75);
+  --animate-fade: fade 5s ease-in-out infinite;
+
   /* Font */
   --font-sans: "Hanken Grotesk", sans-serif;
   --font-heading: "JetBrains Mono", monospace;
@@ -145,6 +149,15 @@
   --color-on-primary-fixed: var(--on-primary-fixed);
   --color-on-primary-fixed-variant: var(--on-primary-fixed-variant);
 
+  --color-tertiary: var(--tertiary);
+  --color-on-tertiary: var(--on-tertiary);
+  --color-tertiary-container: var(--tertiary-container);
+  --color-on-tertiary-container: var(--on-tertiary-container);
+  --color-tertiary-fixed: var(--tertiary-fixed);
+  --color-tertiary-fixed-dim: var(--tertiary-fixed-dim);
+  --color-on-tertiary-fixed: var(--on-tertiary-fixed);
+  --color-on-tertiary-fixed-variant: var(--on-tertiary-fixed-variant);
+
   --color-secondary-foreground: var(--on-secondary);
   --color-secondary: var(--secondary);
 
@@ -188,7 +201,10 @@
   --radius-2xl: calc(var(--radius) * 1.8);
   --radius-3xl: calc(var(--radius) * 2.2);
   --radius-4xl: calc(var(--radius) * 2.6);
+
   --shadow-md: var(--box-shadow);
+  --shadow-logo: var(--box-shadow-1);
+  --animate-fade: var(--animate-fade);
 
   --color-chart-5: var(--tertiary-container);
   --color-chart-4: var(--secondary-container);
@@ -213,7 +229,7 @@
   @apply uppercase text-xs font-semibold leading-[14px] tracking-[0.55px];
 }
 .container {
-  @apply max-w-7xl mx-auto md:px-0 sm:px-5 px-10 ;
+  @apply max-w-6xl mx-auto xl:px-0 sm:px-5 px-10;
 }
 .font-heading {
   @apply font-heading;
@@ -221,4 +237,15 @@
 Link,
 Button {
   @apply cursor-pointer;
+}
+@keyframes fade {
+  0% {
+    box-shadow: 0 0 10px rgba(93, 223, 253, 0.75);
+  }
+  50% {
+    box-shadow: 0 0 40px rgba(93, 223, 253, 0.75);
+  }
+  100% {
+    box-shadow: 0 0 10px rgba(93, 223, 253, 0.75);
+  }
 }

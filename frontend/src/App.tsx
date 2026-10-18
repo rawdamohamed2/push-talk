@@ -13,7 +13,7 @@ function App() {
         <Route path="/sign-up" element={<Signup />} />
         <Route element={<AppLayout />}>
           <Route path="/channels" element={<ChannelsPage />} />
-          <Route path="/channels/:channelId" element={<ChannelRoomPage />} />
+          <Route path="/channels/:id" element={<ChannelRoomPage />} />
         </Route>
       </Routes>
     </BrowserRouter>
