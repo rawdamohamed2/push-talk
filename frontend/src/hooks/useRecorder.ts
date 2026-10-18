@@ -38,7 +38,9 @@ export function useRecorder({
   const cancelRequestedRef = useRef(false);
 
   const callbacksRef = useRef({ onStart, onFinish, onEnd });
-  callbacksRef.current = { onStart, onFinish, onEnd };
+  useEffect(() => {
+    callbacksRef.current = { onStart, onFinish, onEnd };
+  });
 
   const cleanup = useCallback(() => {
     if (tickRef.current !== null) window.clearInterval(tickRef.current);
