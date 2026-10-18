@@ -12,9 +12,10 @@ interface MessageItemProps {
   message: Message;
   isMine: boolean;
   isPlaying: boolean;
+  isPaused: boolean;
+  onTogglePlay: (message: Message) => void;
   progress?: number;
 }
-
 const MessageItem = memo(
   ({ message, isMine, isPlaying, progress = 0 }: MessageItemProps) => {
     const { status, peaks, durationMs, senderName, createdAt, deliveryStatus } =
@@ -82,6 +83,8 @@ const MessageItem = memo(
                     "flex size-9 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground",
                     `${isPlaying ? playingColor : idleColor}`,
                   )}
+                  aria-label={isPlaying && !isPaused ? "Pause" : "Play"}
+                  onClick={() => onTogglePlay(message)}
                 >
                   {isPlaying ? (
                     <Pause className="size-4" />

@@ -1,43 +1,56 @@
-import type {AudioPlayer, QueuedMessage} from "@/types/playQueue.type.ts";
-
+import type { AudioPlayer, QueuedMessage } from "@/types/playQueue.type.ts";
+type OnProgress = (progress: number) => void;
 
 type FetchAudio = (messageId: number) => Promise<Blob>;
 
 export class BrowserAudioPlayer implements AudioPlayer {
-    private readonly fetchAudio: FetchAudio;
-    private current: HTMLAudioElement | null = null;
+  private readonly fetchAudio: FetchAudio;
+  private readonly onProgress?: OnProgress;
+  private current: HTMLAudioElement | null = null;
+  private finishCurrent: (() => void) | null = null;
 
-    constructor(fetchAudio: FetchAudio) {
-        this.fetchAudio = fetchAudio;
+  constructor(fetchAudio: FetchAudio, onProgress?: OnProgress) {
+    this.fetchAudio = fetchAudio;
+    this.onProgress = onProgress;
+  }
+
+  async play(message: QueuedMessage): Promise<void> {
+    const blob = await this.fetchAudio(message.id);
+    const url = URL.createObjectURL(blob);
+    const audio = new Audio(url);
+    this.current = audio;
+
+    audio.ontimeupdate = () => {
+      if (Number.isFinite(audio.duration) && audio.duration > 0) {
+        this.onProgress?.(audio.currentTime / audio.duration);
+      }
+    };
+
+    try {
+      await new Promise<void>((resolve, reject) => {
+        this.finishCurrent = resolve;
+        audio.onended = () => resolve();
+        audio.onerror = () => reject(new Error("audio playback failed"));
+        audio.play().catch(reject);
+      });
+    } finally {
+      URL.revokeObjectURL(url);
+      this.current = null;
+      this.finishCurrent = null;
+      this.onProgress?.(0);
     }
+  }
 
-    private paused = false;
+  pause(): void {
+    this.current?.pause();
+  }
 
-    pause(): void {
-        this.paused = true;
-        this.current?.pause();
-    }
+  resume(): void {
+    void this.current?.play();
+  }
 
-    resume(): void {
-        this.paused = false;
-        void this.current?.play();
-    }
-
-    async play(message: QueuedMessage): Promise<void> {
-        const blob = await this.fetchAudio(message.id);
-        const url = URL.createObjectURL(blob);
-        const audio = new Audio(url);
-        this.current = audio;
-
-        try {
-            await new Promise<void>((resolve, reject) => {
-                audio.onended = () => resolve();
-                audio.onerror = () => reject(new Error("audio playback failed"));
-                if (!this.paused) audio.play().catch(reject); // مايبدأش لو paused
-            });
-        } finally {
-            URL.revokeObjectURL(url);
-            this.current = null;
-        }
-    }
+  stop(): void {
+    this.current?.pause();
+    this.finishCurrent?.();
+  }
 }
