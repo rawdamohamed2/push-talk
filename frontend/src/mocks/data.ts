@@ -19,7 +19,7 @@ export const mockChannels: Channel[] = [
   { id: 4, name: "design", memberCount: 2, isMember: false },
 ];
 
-function makePeaks(seed: number, count = 32): number[] {
+export function makePeaks(seed: number, count = 32): number[] {
   return Array.from({ length: count }, (_, i) => {
     const v = Math.abs(Math.sin(seed * 12.9898 + i * 78.233));
     return Math.round((0.15 + v * 0.85) * 100) / 100;
@@ -129,3 +129,23 @@ export const mockMessages: Message[] = [
     createdAt: at(8),
   },
 ];
+
+export function getMockHistory(channelId: number, count = 60): Message[] {
+  return Array.from({ length: count }, (_, i) => {
+    const seq = i + 1;
+    const sender = mockUsers[i % 4];
+    const mine = sender.id === mockCurrentUser.id;
+    return {
+      id: channelId * 1000 + seq,
+      channelId,
+      senderId: sender.id,
+      senderName: sender.username,
+      seq,
+      status: "sent",
+      durationMs: 2000 + (i % 7) * 1000,
+      peaks: makePeaks(seq),
+      deliveryStatus: mine ? "played" : "sent",
+      createdAt: at(i),
+    };
+  });
+}
