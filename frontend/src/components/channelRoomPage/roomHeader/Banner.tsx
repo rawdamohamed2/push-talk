@@ -1,7 +1,7 @@
 const Banner = () => {
   return (
     <div
-      className={`bg-surface-container-lowest py-3 px-4 stroke-[#31353C]/20 flex items-center gap-2`}
+      className={`bg-surface-container-lowest py-3 px-4 stroke-[#31353C]/20 flex flex-wrap sm:justify-start justify-center items-center gap-2`}
     >
       <p
         className={`text-[12px] font-heading text-secondary font-semibold leading-[12px] tracking-[0.4px]`}

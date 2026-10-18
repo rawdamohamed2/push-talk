@@ -2,9 +2,9 @@ import { memo } from "react";
 import { AlertCircle, Loader2, Pause, Play } from "lucide-react";
 
 import { cn } from "@/lib/utils.ts";
-import type { Message } from "@/types/index.ts";
+import type { Message } from "@/types";
 import Waveform from "@/components/channelRoomPage/Waveform.tsx";
-import StatusIcon from "@/components/channelRoomPage/StatusIcon.tsx";
+import StatusIcon from "@/components/channelRoomPage/Message/StatusIcon.tsx";
 import { formatDuration, formatTime } from "@/lib/format.ts";
 import { Button } from "@/components/ui/button.tsx";
 
@@ -17,7 +17,14 @@ interface MessageItemProps {
   progress?: number;
 }
 const MessageItem = memo(
-  ({ message, isMine, isPlaying, progress = 0 }: MessageItemProps) => {
+  ({
+    message,
+    isMine,
+    isPlaying,
+    isPaused,
+    onTogglePlay,
+    progress = 0,
+  }: MessageItemProps) => {
     const { status, peaks, durationMs, senderName, createdAt, deliveryStatus } =
       message;
     const idleColor = isMine
@@ -49,7 +56,6 @@ const MessageItem = memo(
             className={cn(
               "flex w-full max-w-md items-center gap-3 rounded-xl p-3",
               isMine ? "bg-primary-container" : "bg-popover/30",
-              isPlaying && "border border-primary",
               status === "failed" && "text-on-error bg-error",
             )}
           >
@@ -86,7 +92,7 @@ const MessageItem = memo(
                   aria-label={isPlaying && !isPaused ? "Pause" : "Play"}
                   onClick={() => onTogglePlay(message)}
                 >
-                  {isPlaying ? (
+                  {isPlaying && !isPaused ? (
                     <Pause className="size-4" />
                   ) : (
                     <Play className="size-4" />

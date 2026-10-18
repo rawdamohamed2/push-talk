@@ -1,5 +1,5 @@
 import { Check, CheckCheck } from "lucide-react";
-import type { DeliveryStatus as Status } from "@/types/index.ts";
+import type { DeliveryStatus as Status } from "@/types";
 
 const CONFIG = {
   sent: { Icon: Check, label: "Sent", className: "text-muted-foreground" },

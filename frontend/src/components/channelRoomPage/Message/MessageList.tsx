@@ -1,33 +1,32 @@
-import type { Message } from "@/types/index.ts";
-import MessageItem from "@/components/channelRoomPage/MessageItem.tsx";
+import type { Message } from "@/types";
+import MessageItem from "@/components/channelRoomPage/Message/MessageItem.tsx";
 import { useLayoutEffect, useRef } from "react";
 import { Loader2 } from "lucide-react";
-import { usePlaybackQueue } from "@/hooks/usePlaybackQueue.ts";
-
-interface MessageListProps {
-  messages: Message[];
-  currentUserId: number;
-  playingId: number | null;
-  hasMore: boolean;
-  isLoadingOlder: boolean;
-  onLoadOlder: () => void;
-}
+import MessageEmpty from "@/components/channelRoomPage/Message/MessageEmpty.tsx";
 
 const TOP_THRESHOLD_PX = 80;
 interface MessageListProps {
   messages: Message[];
   currentUserId: number;
   playingId: number | null;
-  progress?: number;
+  isPaused: boolean;
+  progress: number;
+  hasMore: boolean;
+  isLoadingOlder: boolean;
+  onLoadOlder: () => void;
+  onTogglePlay: (message: Message) => void;
 }
 
 const MessageList = ({
   messages,
   currentUserId,
   playingId,
+  isPaused,
+  progress,
   hasMore,
   isLoadingOlder,
   onLoadOlder,
+  onTogglePlay,
 }: MessageListProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const heightBeforeLoadRef = useRef<number | null>(null);
@@ -59,21 +58,13 @@ const MessageList = ({
     }
   }, [messages]);
 
-  const { queue, playingId, waiting, paused } = usePlaybackQueue(
-    user.id,
-    fetchSampleAudio,
-  );
   if (messages.length === 0) {
-    return (
-      <section className="min-h-[500px] flex px-10 flex-1 items-center justify-center md:text-4xl text-3xl text-center text-muted-foreground">
-        <p>No messages yet. Hold the button and say hello.</p>
-      </section>
-    );
+    return <MessageEmpty />;
   }
 
   return (
     <div className="relative flex-1 overflow-hidden">
-      {isLoadingOlder && (
+      {isLoadingOlder && messages.length !== 0 && (
         <div
           className="absolute inset-x-0 top-2 z-10 flex justify-center"
           role="status"
@@ -96,9 +87,9 @@ const MessageList = ({
             message={m}
             isMine={m.senderId === currentUserId}
             isPlaying={playingId === m.id}
-            playingId={playingId}
-            isPaused={paused}
-            onTogglePlay={(m) => queue.toggle(m)}
+            isPaused={isPaused}
+            progress={playingId === m.id ? progress : 0}
+            onTogglePlay={onTogglePlay}
           />
         ))}
       </div>
