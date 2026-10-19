@@ -6,5 +6,7 @@ class Settings(BaseSettings):
     redis_url: str
     jwt_secret: str
     media_root: str = "/media"
+    jwt_expire_minutes: int = 60 * 24
+    cors_origins: str = "http://localhost:5173"
 
 settings = Settings()
