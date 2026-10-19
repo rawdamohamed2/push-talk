@@ -6,3 +6,6 @@ alembic
 psycopg[binary]
 pyjwt
 argon2-cffi
+python-multipart
+redis
+rq
