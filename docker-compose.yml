@@ -34,6 +34,19 @@ services:
       - ./backend:/code
       - media:/media
 
+  worker:
+    build: ./backend
+    command: sh -c 'rq worker audio --url "$$REDIS_URL"'
+    env_file: .env
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - ./backend:/code
+      - media:/media
+
 volumes:
   pgdata:
   media:
