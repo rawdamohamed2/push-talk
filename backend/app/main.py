@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.config import settings
 from app.errors import register_error_handlers
-from app.routers import auth
+from app.routers import auth, channels
 
 app = FastAPI(title="PushTalk API")
 
@@ -13,9 +13,10 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
 register_error_handlers(app)
 app.include_router(auth.router)
-
+app.include_router(channels.router)
 
 @app.get("/health")
 def health() -> dict[str, str]:
