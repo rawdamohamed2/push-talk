@@ -10,14 +10,10 @@ from app.models import Channel, Message, User
 from app.schemas.message import MessageOut
 from app.services.audio import convert_to_ogg, extract_peaks, ogg_duration_ms
 from app.services.storage import storage
+from app.services.realtime import event_channel
 
 logger = logging.getLogger("pushtalk.worker")
 redis_client = Redis.from_url(settings.redis_url)
-
-
-def event_channel(channel_id: int) -> str:
-    return f"channel:{channel_id}"
-
 
 def _publish(db: Session, message: Message, event_type: str) -> None:
     sender = db.get(User, message.sender_id)
