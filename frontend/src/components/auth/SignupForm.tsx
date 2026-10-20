@@ -11,41 +11,50 @@ import {
   InputGroupAddon,
   InputGroupInput,
 } from "@/components/ui/input-group.tsx";
-import { ArrowRight, Lock, SquareUserRound } from "lucide-react";
+import { ArrowRight, Loader, Lock, SquareUserRound } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox.tsx";
 import { Button } from "@/components/ui/button.tsx";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import type { signUpData } from "@/types/auth.type.ts";
+import type { loginData, signUpData } from "@/types/auth.type.ts";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { signupSchema, type SignupValues } from "@/schemas/auth.schema.ts";
+import { signupSchema } from "@/schemas/auth.schema.ts";
 import { PasswordRequirements } from "@/components/auth/PasswordRequirements.tsx";
 import { getPasswordStrength, STYLES } from "@/lib/passwordStrength.ts";
+import { useSignup } from "@/hooks/queries/useAuth.ts";
 
 const SignupForm = () => {
   const {
     register,
     handleSubmit,
     watch,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm<signUpData>({
     resolver: zodResolver(signupSchema),
     mode: "onChange",
     criteriaMode: "all",
   });
-  const navigate = useNavigate();
   const password = watch("password", "");
   const { level } = getPasswordStrength(password);
+  const signup = useSignup();
 
-  const onSubmit = ({ username, password }: SignupValues) => {
-    navigate("/channels");
-    console.log(username, password);
+  const onSubmit = (data: signUpData) => {
+    const user: loginData = {
+      username: data.username,
+      password: data.password,
+    };
+    signup.mutate(user);
   };
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
       className={`md:w-md w-full flex flex-col gap-4 bg-muted sm:px-10 px-6  py-10 rounded-xl`}
     >
+      {signup.isError && (
+        <p className={`text-on-error bg-error rounded-md p-3 text-sm `}>
+          {signup.error.message}
+        </p>
+      )}
       <FieldGroup>
         <Field>
           <FieldLabel className={`from-label`} htmlFor="email">
@@ -123,15 +132,24 @@ const SignupForm = () => {
           </FieldContent>
         </Field>
         <Button
-          className={`w-full h-11 flex justify-center items-center gap-1 
-          text-xs font-semibold disabled:bg-primary-container/20
+          className={`w-full h-11
+          text-xs font-semibold disabled:bg-primary-container/80
           `}
           aria-label="Submit"
           type={"submit"}
-          disabled={isSubmitting}
+          disabled={signup.isPending}
         >
-          <span>Get Started with PushTalk</span>
-          <ArrowRight />
+          {signup.isPending ? (
+            <span className={` flex justify-center items-center gap-1 `}>
+              <span>Signing up</span>
+              <Loader className={`animate-spin`} />
+            </span>
+          ) : (
+            <span className={` flex justify-center items-center gap-1 `}>
+              <span>Get Started with PushTalk</span>
+              <ArrowRight />
+            </span>
+          )}
         </Button>
       </FieldGroup>
       <FieldSeparator />
