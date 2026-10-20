@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   createChannel,
+  getChannel,
   getChannelMembers,
   getChannels,
   joinChannel,
@@ -12,45 +13,46 @@ export const channelKeys = {
   members: (id: number) => ["channel", id, "members"] as const,
 };
 
-export const getChannelsQuery = () => {
+export const useChannels = () => {
   return useQuery({
     queryKey: ["channels"],
     queryFn: getChannels,
   });
 };
 
-export const createChannelMutation = () => {
-  useMutation({
+export const useChannelMembers = (id: number, enabled = true) =>
+  useQuery({
+    queryKey: channelKeys.members(id),
+    queryFn: () => getChannelMembers(id),
+    enabled: enabled && id > 0,
+  });
+
+export function useCreateChannel() {
+  const qc = useQueryClient();
+  return useMutation({
     mutationFn: createChannel,
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ["channels"],
-      });
+    onSuccess: (channel) => {
+      qc.setQueryData(channelKeys.detail(channel.id), channel);
+      qc.invalidateQueries({ queryKey: channelKeys.all });
     },
   });
-};
+}
 
-export const useChannel = (channel_id?: number) => {
-  const joinChannelMutation = useMutation({
+export function useJoinChannel() {
+  const qc = useQueryClient();
+  return useMutation({
     mutationFn: joinChannel,
-
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ["channels"],
-      });
+    onSuccess: (channel) => {
+      qc.setQueryData(channelKeys.detail(channel.id), channel);
+      qc.invalidateQueries({ queryKey: channelKeys.all });
+      qc.invalidateQueries({ queryKey: channelKeys.members(channel.id) });
     },
   });
+}
 
-  const getChannelMembersQuery = useQuery({
-    queryKey: ["channelMembers", channel_id],
-    queryFn: () => getChannelMembers(channel_id!),
-    enabled: channel_id !== undefined,
+export const useGetChannels = (id: number, enabled = true) =>
+  useQuery({
+    queryKey: channelKeys.detail(id),
+    queryFn: () => getChannel(id),
+    enabled: enabled && id > 0,
   });
-
-  return {
-    getChannelsQuery,
-    createChannelMutation,
-    joinChannelMutation,
-    getChannelMembersQuery,
-  };
-};

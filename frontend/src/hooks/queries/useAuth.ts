@@ -1,15 +1,14 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { login, signup } from "@/api/auth";
+import { useMutation } from "@tanstack/react-query";
+import { login, signup } from "@/api/auth.ts";
 import { useNavigate } from "react-router-dom";
 import type { StoredAuth } from "@/types/auth.type.ts";
-import { authStorage } from "@/lib/authStorage.ts";
+import { useSession } from "@/hooks/useSession.tsx";
 
 function useAuthSuccess() {
   const navigate = useNavigate();
-  const queryClient = useQueryClient();
+  const { signIn } = useSession();
   return (auth: StoredAuth) => {
-    queryClient.clear();
-    authStorage.set(auth);
+    signIn(auth);
     navigate("/channels", { replace: true });
   };
 }
