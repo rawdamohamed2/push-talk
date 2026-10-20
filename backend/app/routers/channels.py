@@ -33,3 +33,7 @@ def join_channel(channel_id: int, user: User = Depends(current_user), db: Sessio
 @router.get("/{channel_id}/members", response_model=list[UserOut])
 def list_members(channel_id: int, user: User = Depends(current_user), db: Session = Depends(get_db)):
     return channel_service.list_members(db, channel_id, user)
+
+@router.get("/{channel_id}", response_model=ChannelOut)
+def get_channel(channel_id: int, user: User = Depends(current_user), db: Session = Depends(get_db)):
+    return channel_service.get_channel(db, channel_id, user)

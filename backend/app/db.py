@@ -14,6 +14,5 @@ class Base(DeclarativeBase):
 
 
 def get_db() -> Iterator[Session]:
-    """Dependency: session واحدة لكل request وتتقفل بعده."""
     with SessionLocal() as db:
         yield db
