@@ -1,9 +1,4 @@
-import {
-  mockChannels,
-  mockCurrentUser,
-  mockOnlineUserIds,
-  mockUsers,
-} from "@/mocks/data.ts";
+import { mockOnlineUserIds } from "@/mocks/data.ts";
 import { useAudioUnlock } from "@/hooks/useAudioUnlock.ts";
 import { usePlaybackQueue } from "@/hooks/usePlaybackQueue.ts";
 import { useRoomMessages } from "@/hooks/useRoomMessages.ts";
@@ -18,14 +13,28 @@ import QueueBanner from "@/components/channelRoomPage/QueueBanner.tsx";
 import MessageList from "@/components/channelRoomPage/Message/MessageList.tsx";
 import { PushToTalkButton } from "@/components/channelRoomPage/PushToTalkButton.tsx";
 import EmptyState from "@/components/channelsPage/EmptyState.tsx";
+import {
+  useChannelMembers,
+  useGetChannels,
+} from "@/hooks/queries/useChannels.ts";
+import { toast } from "sonner";
+import ChannelRoomSkeleton from "@/components/channelRoomPage/ChannelRoomSkeleton.tsx";
+import { useSession } from "@/hooks/useSession.tsx";
 
 const fetchSampleAudio = async () => (await fetch("/sample.mp3")).blob();
 
 const ChannelRoomPage = () => {
   const { id } = useParams();
-  const channel = mockChannels.find((c) => c.id === Number(id));
 
-  if (!channel) {
+  const getChannel = useGetChannels;
+
+  const { isPending, isError, error, data: channel } = getChannel(Number(id));
+
+  if (isError) toast.error(error.message);
+
+  if (isPending) return <ChannelRoomSkeleton />;
+
+  if (!channel || isError) {
     return (
       <main className={`my-5 p-5`}>
         <EmptyState isChannel={true} />
@@ -37,13 +46,25 @@ const ChannelRoomPage = () => {
 };
 
 function ChannelRoom({ channel }: { channel: Channel }) {
-  const user = mockCurrentUser;
+  const { auth } = useSession();
+  const user = auth!.user;
   const [mutedDismissed, setMutedDismissed] = useState(false);
   const { unlocked, unlock } = useAudioUnlock();
+
   const { queue, playingId, waiting, paused, progress } = usePlaybackQueue(
     user.id,
     fetchSampleAudio,
   );
+  const getChannelMember = useChannelMembers;
+
+  const {
+    isPending: memberPending,
+    isError: memberIsError,
+    error: memberError,
+    data: members,
+  } = getChannelMember(channel.id);
+
+  if (memberIsError) toast.error(memberError.message);
 
   const room = useRoomMessages(channel.id);
 
@@ -70,6 +91,8 @@ function ChannelRoom({ channel }: { channel: Channel }) {
       );
     }
   };
+
+  if (memberPending) return null;
   return (
     <main className="flex h-full flex-col">
       {!unlocked && !mutedDismissed && (
@@ -81,7 +104,7 @@ function ChannelRoom({ channel }: { channel: Channel }) {
 
       <RoomHeader
         channel={channel}
-        members={mockUsers}
+        members={members!}
         onlineIds={mockOnlineUserIds}
         status="connected"
       />
@@ -110,17 +133,6 @@ function ChannelRoom({ channel }: { channel: Channel }) {
         onLoadOlder={room.loadOlder}
         onTogglePlay={onTogglePlay}
       />
-
-      {import.meta.env.DEV && (
-        <Button
-          variant="outline"
-          size="sm"
-          className="mx-auto mb-2"
-          onClick={() => queue.enqueue(room.addMockIncoming())}
-        >
-          Simulate incoming message
-        </Button>
-      )}
 
       <PushToTalkButton
         state={recorder.state}
