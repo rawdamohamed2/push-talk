@@ -8,6 +8,9 @@ export interface Channel {
   memberCount: number;
   isMember: boolean;
 }
+export interface newChannel {
+  name: string;
+}
 export type MessageStatus = "processing" | "sent" | "failed";
 export type DeliveryStatus = "sent" | "delivered" | "played";
 

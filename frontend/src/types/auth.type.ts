@@ -1,7 +1,8 @@
+import type { User } from "@/types/index.ts";
+
 export interface user {
-  password: string;
+  id: number;
   username: string;
-  created_at: string;
 }
 export interface loginData {
   username: string;
@@ -11,4 +12,8 @@ export interface signUpData {
   username: string;
   password: string;
   password_confirmation: string;
+}
+export interface StoredAuth {
+  token: string;
+  user: User;
 }
