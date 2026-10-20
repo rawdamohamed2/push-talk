@@ -1,4 +1,4 @@
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import {
   Sidebar,
   SidebarContent,
@@ -10,19 +10,30 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { mockChannels, mockCurrentUser } from "@/mocks/data.ts";
+import { mockCurrentUser } from "@/mocks/data.ts";
 import logo from "@/assets/logo.webp";
 import { Button } from "@/components/ui/button.tsx";
 import { LogOut } from "lucide-react";
 import UserAvatar from "@/components/shared/UserAvatar.tsx";
 import { Separator } from "@/components/ui/separator.tsx";
+import { useChannels } from "@/hooks/queries/useChannels.ts";
+import { Skeleton } from "@/components/ui/skeleton.tsx";
+import { toast } from "sonner";
+import { useMemo } from "react";
+import { useSession } from "@/hooks/useSession.tsx";
 
 export function AppSidebar() {
-  const navigate = useNavigate();
-  const myChannels = mockChannels.filter((c) => c.isMember);
-  const logout = () => {
-    navigate("/");
-  };
+  const getChannelsQuery = useChannels();
+
+  const { data: channels, isPending, isError, error } = getChannelsQuery;
+
+  if (isError) toast.error(error.message);
+
+  const myChannels = useMemo(
+    () => channels?.filter((c) => c.isMember),
+    [channels],
+  );
+  const { signOut } = useSession();
   return (
     <Sidebar>
       <SidebarHeader className="flex-row items-center gap-4 px-4 py-3">
@@ -55,21 +66,32 @@ export function AppSidebar() {
             CHANNELS & FREQUENCIES
           </SidebarGroupLabel>
           <SidebarMenu className={`px-2 gap-4 mb-2`}>
-            {myChannels.map((c) => (
-              <SidebarMenuItem
-                key={c.id}
-                className={`bg-sidebar-accent px-2 rounded-md `}
-              >
-                <SidebarMenuButton>
-                  <NavLink
-                    to={`/channels/${c.id}`}
-                    className={`text-sidebar-accent-foreground hover:text-secondary`}
+            {isPending || isError || !myChannels
+              ? [1, 2, 3, 4].map((i) => (
+                  <SidebarMenuItem
+                    key={i}
+                    className={`bg-sidebar-accent px-2 rounded-md h-10 w-full flex justify-start items-center`}
                   >
-                    # {c.name}
-                  </NavLink>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-            ))}
+                    <Skeleton className={`w-40 h-5 my-auto`}>
+                      <Skeleton className={``}></Skeleton>
+                    </Skeleton>
+                  </SidebarMenuItem>
+                ))
+              : myChannels.map((c) => (
+                  <SidebarMenuItem
+                    key={c.id}
+                    className={`bg-sidebar-accent px-2 rounded-md `}
+                  >
+                    <SidebarMenuButton>
+                      <NavLink
+                        to={`/channels/${c.id}`}
+                        className={`text-sidebar-accent-foreground hover:text-secondary`}
+                      >
+                        # {c.name}
+                      </NavLink>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                ))}
           </SidebarMenu>
         </SidebarGroup>
         <Separator orientation={"horizontal"} className={`my-4`} />
@@ -96,7 +118,7 @@ export function AppSidebar() {
         <Button
           aria-label={`log out`}
           variant={"link"}
-          onClick={logout}
+          onClick={signOut}
           className={`uppercase font-bold`}
         >
           <span>
