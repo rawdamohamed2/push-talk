@@ -4,11 +4,12 @@ import { Badge } from "@/components/ui/badge.tsx";
 import { ArrowRight, Plus, Users } from "lucide-react";
 import { Button } from "@/components/ui/button.tsx";
 import { Link } from "react-router-dom";
+
 interface ChannelCardProps {
   channel: Channel;
-  onJoin?: (id: number) => void;
+  join: (id: number) => void;
 }
-const ChannelCard = ({ channel, onJoin }: ChannelCardProps) => {
+const ChannelCard = ({ channel, join }: ChannelCardProps) => {
   return (
     <Card
       className={`grid md:grid-cols-3 grid-cols-1 px-3 items-center justify-center`}
@@ -55,18 +56,16 @@ const ChannelCard = ({ channel, onJoin }: ChannelCardProps) => {
           >
             Open Channel <ArrowRight size={15} />
           </Link>
-        ) : onJoin !== undefined ? (
+        ) : (
           <Button
             variant={"secondary"}
             className={`md:w-fit w-full md:py-1 h-10`}
             onClick={() => {
-              onJoin(channel.id);
+              join(channel.id);
             }}
           >
             <Plus /> Join Channel
           </Button>
-        ) : (
-          ""
         )}
       </div>
     </Card>
