@@ -20,7 +20,7 @@ export class PlaybackQueue {
     this.seen.add(message.id);
 
     this.pending.push(message);
-    this.pending.sort((a, b) => a.seq - b.seq);
+    this.pending.sort((a, b) => a.seq! - b.seq!);
     this.emit();
     void this.playNext();
   }
@@ -63,9 +63,10 @@ export class PlaybackQueue {
   playFrom(message: QueuedMessage, following: QueuedMessage[]): void {
     this.pending = following
       .filter(
-        (m) => m.seq > message.seq && m.senderId !== this.options.currentUserId,
+        (m) =>
+          m.seq! > message.seq! && m.senderId !== this.options.currentUserId,
       )
-      .sort((a, b) => a.seq - b.seq);
+      .sort((a, b) => a.seq! - b.seq!);
     this.pending.forEach((m) => this.seen.add(m.id));
     this.seen.add(message.id);
     this.nextManual = message;
