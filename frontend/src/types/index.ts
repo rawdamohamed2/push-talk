@@ -19,7 +19,7 @@ export interface Message {
   channelId: number;
   senderId: number;
   senderName: string;
-  seq: number;
+  seq: number | null;
   status: MessageStatus;
   durationMs: number | null;
   peaks: number[] | null;
