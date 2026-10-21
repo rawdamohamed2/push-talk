@@ -1,7 +1,6 @@
 import { mockOnlineUserIds } from "@/mocks/data.ts";
 import { useAudioUnlock } from "@/hooks/useAudioUnlock.ts";
 import { usePlaybackQueue } from "@/hooks/usePlaybackQueue.ts";
-import { useRoomMessages } from "@/hooks/useRoomMessages.ts";
 import { useParams } from "react-router-dom";
 import type { Channel, Message } from "@/types";
 import { useEffect, useState } from "react";
@@ -20,8 +19,9 @@ import {
 import { toast } from "sonner";
 import ChannelRoomSkeleton from "@/components/channelRoomPage/ChannelRoomSkeleton.tsx";
 import { useSession } from "@/hooks/useSession.tsx";
-
-const fetchSampleAudio = async () => (await fetch("/sample.mp3")).blob();
+import { useMessages } from "@/hooks/queries/useMessages.ts";
+import { UseUploadMessage } from "@/hooks/queries/useUploadMessage.ts";
+import { fetchAudioBlob } from "@/api/messages.ts";
 
 const ChannelRoomPage = () => {
   const { id } = useParams();
@@ -51,12 +51,7 @@ function ChannelRoom({ channel }: { channel: Channel }) {
   const [mutedDismissed, setMutedDismissed] = useState(false);
   const { unlocked, unlock } = useAudioUnlock();
 
-  const { queue, playingId, waiting, paused, progress } = usePlaybackQueue(
-    user.id,
-    fetchSampleAudio,
-  );
   const getChannelMember = useChannelMembers;
-
   const {
     isPending: memberPending,
     isError: memberIsError,
@@ -64,21 +59,28 @@ function ChannelRoom({ channel }: { channel: Channel }) {
     data: members,
   } = getChannelMember(channel.id);
 
-  if (memberIsError) toast.error(memberError.message);
+  const { messages, hasMore, isLoadingOlder, isLoading, error, loadOlder } =
+    useMessages(channel.id, channel.isMember);
 
-  const room = useRoomMessages(channel.id);
-
+  const { queue, playingId, waiting, paused, progress } = usePlaybackQueue(
+    user.id,
+    fetchAudioBlob,
+  );
+  console.log(messages, playingId, waiting, paused, progress);
   useEffect(() => {
     if (unlocked) queue.resume();
     else queue.pause();
   }, [unlocked, queue]);
+
+  const upload = UseUploadMessage(channel.id, user);
 
   const recorder = useRecorder({
     onStart: () => queue.pause(),
     onEnd: () => {
       if (unlocked) queue.resume();
     },
-    onFinish: (_blob, durationMs) => room.sendMockVoice(user, durationMs),
+    onFinish: (blob) =>
+      upload.mutate(blob, { onError: (e) => toast.error(e.message) }),
   });
 
   const onTogglePlay = (m: Message) => {
@@ -87,12 +89,15 @@ function ChannelRoom({ channel }: { channel: Channel }) {
     } else {
       queue.playFrom(
         m,
-        room.messages.filter((x) => x.status === "sent"),
+        messages.filter((x) => x.status === "sent"),
       );
     }
   };
 
-  if (memberPending) return null;
+  if (error) toast.error(error.message);
+  if (memberIsError) toast.error(memberError.message);
+  if (memberPending || memberIsError) return <ChannelRoomSkeleton />;
+  if (isLoading || error) return <ChannelRoomSkeleton />;
   return (
     <main className="flex h-full flex-col">
       {!unlocked && !mutedDismissed && (
@@ -104,7 +109,7 @@ function ChannelRoom({ channel }: { channel: Channel }) {
 
       <RoomHeader
         channel={channel}
-        members={members!}
+        members={members}
         onlineIds={mockOnlineUserIds}
         status="connected"
       />
@@ -123,14 +128,14 @@ function ChannelRoom({ channel }: { channel: Channel }) {
       <QueueBanner waiting={waiting} />
 
       <MessageList
-        messages={room.messages}
+        messages={messages}
         currentUserId={user.id}
         playingId={playingId}
         isPaused={paused}
         progress={progress}
-        hasMore={room.hasMore}
-        isLoadingOlder={room.isLoadingOlder}
-        onLoadOlder={room.loadOlder}
+        hasMore={hasMore}
+        isLoadingOlder={isLoadingOlder}
+        onLoadOlder={loadOlder}
         onTogglePlay={onTogglePlay}
       />
 
