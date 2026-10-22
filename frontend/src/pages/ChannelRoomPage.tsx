@@ -80,7 +80,7 @@ function ChannelRoom({ channel }: { channel: Channel }) {
       if (queued) queue.enqueue(queued);
     },
   );
-  console.log(socket.status);
+
   useEffect(() => {
     sendPlayedRef.current = socket.sendPlayed;
   }, [socket.sendPlayed]);
