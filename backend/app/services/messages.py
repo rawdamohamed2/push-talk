@@ -30,7 +30,8 @@ def submit_audio(db: Session, user: User, channel_id: int, data: bytes) -> Messa
         raise AppError(400, "empty_file", "The audio file is empty")
     if len(data) > settings.max_upload_bytes:
         raise AppError(413, "file_too_large", "The audio file is too large")
-
+    if len(data) < settings.min_duration_ms:
+        raise AppError(414, "file_too_small", "The audio file is too small")
     raw_path = storage.save_raw(data)
     try:
         probe_audio(storage.full_path(raw_path))
