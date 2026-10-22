@@ -83,6 +83,36 @@ Errors always look like `{ "error": { "code", "message", "details?" } }`.
 WebSocket events: `presence.snapshot`, `presence.update`, `message.new`, `message.failed` (sender only),
 `receipt.update`. The client sends `message.played`.
 
+## Architecture
+ 
+```mermaid
+flowchart LR
+  subgraph Browser
+    UI[React UI] --> Rec[useRecorder]
+    UI --> Cache[(React Query cache<br/>messages)]
+    UI --> Q[PlaybackQueue]
+    Q --> P[BrowserAudioPlayer]
+    WS[ChannelSocket<br/>reconnect and backoff] --> Cache
+    WS --> Q
+  end
+ 
+  Rec -- "POST message (HTTP)" --> API
+  Cache -- "GET history, before_seq / after_seq" --> API
+  WS <-- "WebSocket events" --> API
+  P -- "GET audio (JWT)" --> API
+ 
+  subgraph Server
+    API[FastAPI<br/>routers, services, data access]
+    API --> PG[(PostgreSQL)]
+    API -- enqueue --> R[(Redis)]
+    R --> W[RQ worker<br/>ffmpeg and peaks]
+    W --> PG
+    W --> FS[(media volume)]
+    W -- "publish message.new" --> R
+    R -- pub/sub --> API
+    API --> FS
+  end
+```
 
 Message flow:
 
