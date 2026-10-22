@@ -14,7 +14,7 @@ import { messageKeys } from "@/hooks/queries/useMessages.ts";
 import type { Message } from "@/types/index.ts";
 import type { ConnectionStatus, ServerEvent } from "@/types/socket.type.ts";
 
-const WS_URL: string = import.meta.env.VITE_WS_URL ?? "ws://localhost:8000";
+const WS_URL: string = import.meta.env.VITE_WS_URL!;
 const CATCH_UP_LIMIT = 100;
 
 export function useChannelSocket(
