@@ -28,17 +28,23 @@ const NewChannelDialog = () => {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<newChannel>({
     resolver: zodResolver(NewChannelSchema),
     mode: "onChange",
     criteriaMode: "all",
+    defaultValues: {
+      name: "",
+    },
   });
   const createChannelMutation = useCreateChannel();
-  const createNewChannel = (name: newChannel) => {
-    createChannelMutation.mutate(name, {
+  const createNewChannel = (data: newChannel) => {
+    createChannelMutation.mutate(data, {
       onSuccess: () => {
         toast.success("The channel created!");
+
+        reset({ name: "" });
         setOpen(false);
       },
       onError: (error) => {
