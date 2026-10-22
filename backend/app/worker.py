@@ -11,7 +11,9 @@ from app.schemas.message import MessageOut
 from app.services.audio import convert_to_ogg, extract_peaks, ogg_duration_ms
 from app.services.storage import storage
 from app.services.realtime import event_channel
+from app.logging_config import setup_logging
 
+setup_logging()
 logger = logging.getLogger("pushtalk.worker")
 redis_client = Redis.from_url(settings.redis_url)
 

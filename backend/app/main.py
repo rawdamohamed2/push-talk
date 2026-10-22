@@ -5,6 +5,9 @@ from app.config import settings
 from app.errors import register_error_handlers
 from app.routers import auth, channels, messages, ws
 
+from app.logging_config import setup_logging
+
+setup_logging()
 app = FastAPI(title="PushTalk API")
 
 app.add_middleware(
