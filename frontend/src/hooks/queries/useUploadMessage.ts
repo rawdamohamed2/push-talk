@@ -1,7 +1,11 @@
 import { uploadMessage } from "@/api/messages.ts";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import type { Message, User } from "@/types";
-import { type MessagePages, upsertMessage } from "@/lib/messageCache.ts";
+import {
+  hasMessage,
+  type MessagePages,
+  upsertMessage,
+} from "@/lib/messageCache.ts";
 import { messageKeys } from "./useMessages";
 
 export const UseUploadMessage = (channelId: number, me: User) => {
@@ -23,7 +27,7 @@ export const UseUploadMessage = (channelId: number, me: User) => {
       };
       queryClient.setQueryData<MessagePages>(
         messageKeys.list(channelId),
-        (old) => upsertMessage(old, pending),
+        (old) => (hasMessage(old, id) ? old : upsertMessage(old, pending)),
       );
     },
   });

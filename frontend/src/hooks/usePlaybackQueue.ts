@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import { PlaybackQueue } from "@/lib/playbackQueue.ts";
 import { BrowserAudioPlayer } from "@/lib/audioPlayer.ts";
-import type { QueueState } from "@/types/playQueue.type.ts";
+import type { QueuedMessage, QueueState } from "@/types/playQueue.type.ts";
 
 export function usePlaybackQueue(
   currentUserId: number,
   fetchAudio: (messageId: number) => Promise<Blob>,
+  onPlayed?: (message: QueuedMessage) => void,
 ) {
   const [state, setState] = useState<QueueState>({
     playingId: null,
@@ -20,6 +21,7 @@ export function usePlaybackQueue(
         currentUserId,
         player: new BrowserAudioPlayer(fetchAudio, setProgress),
         onChange: setState,
+        onPlayed,
       }),
   );
 

@@ -24,6 +24,7 @@ export const useMessages = (channelId: number, enabled: boolean) => {
   const messages = (query.data?.pages ?? []).slice().reverse().flat();
   return {
     messages,
+    isSuccess: query.isSuccess,
     hasMore: query.hasNextPage,
     isLoadingOlder: query.isFetchingNextPage,
     loadOlder: () => void query.fetchNextPage(),

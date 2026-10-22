@@ -33,7 +33,9 @@ export class PlaybackQueue {
   resume(): void {
     this.isPaused = false;
     if (this.isPlaying) {
-      this.options.player.resume();
+      if (!this.isManuallyPaused) {
+        this.options.player.resume();
+      }
     } else {
       void this.playNext();
     }

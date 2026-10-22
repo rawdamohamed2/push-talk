@@ -27,7 +27,8 @@ export interface Message {
   createdAt: string;
 }
 
-export type ConnectionStatus = "connected" | "reconnecting" | "offline";
+export type ConnectionStatus =
+  "connecting" | "connected" | "reconnecting" | "closed";
 
 export const STYLES: Record<
   ConnectionStatus,
@@ -43,5 +44,10 @@ export const STYLES: Record<
     dot: "bg-amber-400 animate-pulse",
     text: "text-amber-400",
   },
-  offline: { label: "Offline", dot: "bg-red-400", text: "text-red-400" },
+  connecting: {
+    label: "connecting...",
+    dot: "bg-amber-400 animate-pulse",
+    text: "text-amber-400",
+  },
+  closed: { label: "Offline", dot: "bg-red-400", text: "text-red-400" },
 };

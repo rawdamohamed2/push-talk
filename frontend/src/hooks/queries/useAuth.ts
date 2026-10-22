@@ -2,7 +2,7 @@ import { useMutation } from "@tanstack/react-query";
 import { login, signup } from "@/api/auth.ts";
 import { useNavigate } from "react-router-dom";
 import type { StoredAuth } from "@/types/auth.type.ts";
-import { useSession } from "@/hooks/useSession.tsx";
+import { useSession } from "@/hooks/context/useSession.tsx";
 
 function useAuthSuccess() {
   const navigate = useNavigate();

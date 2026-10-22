@@ -36,6 +36,7 @@ export function useRecorder({
   const tickRef = useRef<number | null>(null);
   const startingRef = useRef(false);
   const cancelRequestedRef = useRef(false);
+  const stoppedAtRef = useRef(0);
 
   const callbacksRef = useRef({ onStart, onFinish, onEnd });
   useEffect(() => {
@@ -53,7 +54,10 @@ export function useRecorder({
   const stop = useCallback(() => {
     cancelRequestedRef.current = true;
     const recorder = recorderRef.current;
-    if (recorder && recorder.state === "recording") recorder.stop();
+    if (recorder && recorder.state === "recording") {
+      stoppedAtRef.current = Date.now();
+      recorder.stop();
+    }
   }, []);
 
   const start = useCallback(async () => {
@@ -76,7 +80,6 @@ export function useRecorder({
       return;
     }
 
-    // المستخدم فلّت الزر قبل ما المايك يجهز
     if (cancelRequestedRef.current) {
       stream.getTracks().forEach((t) => t.stop());
       startingRef.current = false;
@@ -97,7 +100,7 @@ export function useRecorder({
     };
 
     recorder.onstop = () => {
-      const durationMs = Date.now() - startedAtRef.current;
+      const durationMs = stoppedAtRef.current - startedAtRef.current;
       const blob = new Blob(chunksRef.current, { type: recorder.mimeType });
       cleanup();
       setElapsedMs(0);
@@ -121,7 +124,10 @@ export function useRecorder({
     tickRef.current = window.setInterval(() => {
       const elapsed = Date.now() - startedAtRef.current;
       setElapsedMs(elapsed);
-      if (elapsed >= MAX_DURATION_MS) recorder.stop(); // حد أقصى تلقائي
+      if (elapsed >= MAX_DURATION_MS) {
+        stoppedAtRef.current = Date.now();
+        recorder.stop();
+      }
     }, 100);
   }, [cleanup]);
 
