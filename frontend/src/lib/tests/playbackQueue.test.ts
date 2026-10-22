@@ -123,11 +123,21 @@ describe("PlaybackQueue", () => {
       paused: false,
     });
   });
+
   it("ignores my own messages", () => {
     const { player, queue } = setup();
     queue.enqueue(msg(1, 1, ME));
     expect(player.played).toEqual([]);
     expect(queue.size).toBe(0);
+  });
+
+  it("does not resume a message the user paused manually when recording ends", () => {
+    const { player, queue } = setup();
+    queue.enqueue(msg(1));
+    queue.toggle(msg(1));
+    queue.pause();
+    queue.resume();
+    expect(player.resume).not.toHaveBeenCalled();
   });
 
   it("orders waiting messages by seq, not arrival time", async () => {
@@ -184,6 +194,7 @@ describe("PlaybackQueue", () => {
     await flush();
     expect(onPlayed).toHaveBeenCalledWith(msg(1));
   });
+
   it("manual play stops the current message and plays the chosen one", async () => {
     const { player, queue } = setup();
     queue.enqueue(msg(1));
