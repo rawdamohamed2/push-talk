@@ -67,7 +67,9 @@ export class ChannelSocket {
     ws.onmessage = (e: MessageEvent<string>) => {
       try {
         this.options.onEvent(JSON.parse(e.data) as ServerEvent);
-      } catch {}
+      } catch {
+        console.error("error");
+      }
     };
 
     ws.onclose = (e: CloseEvent) => {
