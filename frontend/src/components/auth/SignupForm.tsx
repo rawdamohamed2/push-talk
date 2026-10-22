@@ -105,8 +105,8 @@ const SignupForm = () => {
           </FieldLabel>
           <InputGroup>
             <InputGroupInput
-              type={"text"}
-              aria-label={"Username"}
+              type={"password"}
+              aria-label={"password_confirmation"}
               placeholder={"SuperP@ssw0rd!"}
               {...register("password_confirmation")}
             />

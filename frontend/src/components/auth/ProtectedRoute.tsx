@@ -1,5 +1,5 @@
 import { Navigate, Outlet, useLocation } from "react-router-dom";
-import { useSession } from "@/hooks/useSession.tsx";
+import { useSession } from "@/hooks/context/useSession.tsx";
 
 const ProtectedRoute = () => {
   const { auth } = useSession();

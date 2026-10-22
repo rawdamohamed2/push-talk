@@ -5,26 +5,26 @@ import {
   InputGroupAddon,
   InputGroupInput,
 } from "@/components/ui/input-group.tsx";
+import { useRef } from "react";
 
 interface SearchInputProps {
-  value: string;
   onChange: (value: string) => void;
   placeholder?: string;
 }
 
 export function SearchInput({
-  value,
   onChange,
   placeholder = "Search channelsPage...",
 }: SearchInputProps) {
+  const searchRef = useRef<HTMLInputElement>(null);
   return (
     <Field>
       <InputGroup>
         <InputGroupInput
           type="search"
           aria-label="Search channels"
+          ref={searchRef}
           placeholder={placeholder}
-          value={value}
           onChange={(e) => onChange(e.target.value)}
         />
         <InputGroupAddon>

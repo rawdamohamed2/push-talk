@@ -18,7 +18,7 @@ const ChannelSection = () => {
     `}
     >
       <div className={`flex flex-col gap-3`}>
-        <div className={`flex gap-3 items-center`}>
+        <div className={`flex md:flex-row flex-col gap-3 items-center`}>
           <Badge>SPECTRUM 2.4 GHZ</Badge>
           <div className={`flex gap-2 items-center`}>
             <span

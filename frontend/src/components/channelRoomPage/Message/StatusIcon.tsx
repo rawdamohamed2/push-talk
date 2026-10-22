@@ -8,7 +8,11 @@ const CONFIG = {
     label: "Delivered",
     className: "text-muted-foreground",
   },
-  played: { Icon: CheckCheck, label: "Played", className: "text-primary" },
+  played: {
+    Icon: CheckCheck,
+    label: "Played",
+    className: "text-secondary",
+  },
 } as const;
 const StatusIcon = ({ status }: { status: Status }) => {
   const { Icon, label, className } = CONFIG[status];

@@ -3,7 +3,7 @@ import { AlertCircle, Loader2, Pause, Play } from "lucide-react";
 
 import { cn } from "@/lib/utils.ts";
 import type { Message } from "@/types";
-import Waveform from "@/components/channelRoomPage/Waveform.tsx";
+import Waveform from "@/components/channelRoomPage/Message/Waveform.tsx";
 import StatusIcon from "@/components/channelRoomPage/Message/StatusIcon.tsx";
 import { formatDuration, formatTime } from "@/lib/format.ts";
 import { Button } from "@/components/ui/button.tsx";
@@ -27,6 +27,7 @@ const MessageItem = memo(
   }: MessageItemProps) => {
     const { status, peaks, durationMs, senderName, createdAt, deliveryStatus } =
       message;
+
     const idleColor = isMine
       ? "bg-on-primary-fixed-variant/60 text-primary-fixed"
       : "bg-border text-muted-foreground";
@@ -36,8 +37,8 @@ const MessageItem = memo(
     return (
       <div
         className={cn(
-          "flex w-full flex-col ",
-          isMine ? "items-end" : "items-start",
+          "flex w-full flex-col",
+          isMine ? "items-end " : "items-start",
         )}
       >
         <div className={`flex flex-col gap-1`}>

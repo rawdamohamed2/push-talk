@@ -8,7 +8,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import ProtectedRoute from "@/components/auth/ProtectedRoute.tsx";
 import GuestRoute from "@/components/auth/GuestRoute.tsx";
 import NotFound from "@/pages/NotFound.tsx";
-import { SessionProvider } from "@/hooks/useSession.tsx";
+import { SessionProvider } from "@/hooks/context/useSession.tsx";
 
 const queryClient = new QueryClient();
 

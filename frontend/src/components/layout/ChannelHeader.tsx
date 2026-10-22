@@ -1,7 +1,6 @@
 import { SidebarTrigger } from "@/components/ui/sidebar.tsx";
 import { Separator } from "@/components/ui/separator.tsx";
 import UserAvatar from "@/components/shared/UserAvatar.tsx";
-import NotificationMenu from "@/components/shared/NotificationMenu.tsx";
 
 const ChannelHeader = () => {
   return (
@@ -21,9 +20,8 @@ const ChannelHeader = () => {
         </p>
       </div>
       <div className={`flex items-center gap-2`}>
-        <NotificationMenu />
-        <Separator orientation="vertical" className={`me-2`} />
         <UserAvatar />
+        <Separator orientation="vertical" className={`me-2`} />
         <SidebarTrigger />
       </div>
     </header>

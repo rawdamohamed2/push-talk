@@ -1,9 +1,8 @@
-import { mockOnlineUserIds } from "@/mocks/data.ts";
 import { useAudioUnlock } from "@/hooks/useAudioUnlock.ts";
 import { usePlaybackQueue } from "@/hooks/usePlaybackQueue.ts";
 import { useParams } from "react-router-dom";
 import type { Channel, Message } from "@/types";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRecorder } from "@/hooks/useRecorder.ts";
 import EnableAudioOverlay from "@/components/channelRoomPage/EnableAudioOverlay";
 import RoomHeader from "@/components/channelRoomPage/roomHeader/RoomHeader";
@@ -18,10 +17,12 @@ import {
 } from "@/hooks/queries/useChannels.ts";
 import { toast } from "sonner";
 import ChannelRoomSkeleton from "@/components/channelRoomPage/ChannelRoomSkeleton.tsx";
-import { useSession } from "@/hooks/useSession.tsx";
+import { useSession } from "@/hooks/context/useSession.tsx";
 import { useMessages } from "@/hooks/queries/useMessages.ts";
 import { UseUploadMessage } from "@/hooks/queries/useUploadMessage.ts";
 import { fetchAudioBlob } from "@/api/messages.ts";
+import { useChannelSocket } from "@/hooks/useChannelSocket.ts";
+import { toQueued } from "@/lib/messageCache";
 
 const ChannelRoomPage = () => {
   const { id } = useParams();
@@ -59,14 +60,30 @@ function ChannelRoom({ channel }: { channel: Channel }) {
     data: members,
   } = getChannelMember(channel.id);
 
-  const { messages, hasMore, isLoadingOlder, isLoading, error, loadOlder } =
-    useMessages(channel.id, channel.isMember);
+  const history = useMessages(channel.id, channel.isMember);
 
+  const { messages, hasMore, isLoadingOlder, isLoading, error, loadOlder } =
+    history;
+
+  const sendPlayedRef = useRef<(id: number) => void>(() => {});
   const { queue, playingId, waiting, paused, progress } = usePlaybackQueue(
     user.id,
     fetchAudioBlob,
+    (m) => sendPlayedRef.current(m.id),
   );
-  console.log(messages, playingId, waiting, paused, progress);
+
+  const socket = useChannelSocket(
+    channel.id,
+    channel.isMember && history.isSuccess,
+    (message) => {
+      const queued = toQueued(message);
+      if (queued) queue.enqueue(queued);
+    },
+  );
+  console.log(socket.status);
+  useEffect(() => {
+    sendPlayedRef.current = socket.sendPlayed;
+  }, [socket.sendPlayed]);
   useEffect(() => {
     if (unlocked) queue.resume();
     else queue.pause();
@@ -109,9 +126,9 @@ function ChannelRoom({ channel }: { channel: Channel }) {
 
       <RoomHeader
         channel={channel}
+        onlineIds={socket.onlineIds}
         members={members}
-        onlineIds={mockOnlineUserIds}
-        status="connected"
+        status={socket.status}
       />
 
       {!unlocked && mutedDismissed && (

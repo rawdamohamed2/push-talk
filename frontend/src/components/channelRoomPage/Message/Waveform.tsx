@@ -17,14 +17,14 @@ const Waveform = ({
   const playingColor = isMine ? "bg-on-primary-container/90 " : "bg-secondary";
   return (
     <div
-      className={cn("flex h-8 flex-1 items-center gap-0.5 ", className)}
+      className={cn("flex h-8 flex-1 items-center gap-0.5", className)}
       aria-hidden
     >
       {peaks.map((peak, i) => (
         <span
           key={i}
           className={cn(
-            "w-1 rounded-full transition-colors ",
+            "xs:w-1 w-[2px] rounded-full transition-colors ",
             i / peaks.length < progress ? playingColor : idleColor,
           )}
           style={{ height: `${Math.max(peak * 100, 10)}%` }}

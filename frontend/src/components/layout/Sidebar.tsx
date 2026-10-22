@@ -7,11 +7,9 @@ import {
   SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
-  SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { mockCurrentUser } from "@/mocks/data.ts";
-import logo from "@/assets/logo.webp";
+import logo from "../../../public/logo.webp";
 import { Button } from "@/components/ui/button.tsx";
 import { LogOut } from "lucide-react";
 import UserAvatar from "@/components/shared/UserAvatar.tsx";
@@ -20,7 +18,7 @@ import { useChannels } from "@/hooks/queries/useChannels.ts";
 import { Skeleton } from "@/components/ui/skeleton.tsx";
 import { toast } from "sonner";
 import { useMemo } from "react";
-import { useSession } from "@/hooks/useSession.tsx";
+import { useSession } from "@/hooks/context/useSession.tsx";
 
 export function AppSidebar() {
   const getChannelsQuery = useChannels();
@@ -33,7 +31,8 @@ export function AppSidebar() {
     () => channels?.filter((c) => c.isMember),
     [channels],
   );
-  const { signOut } = useSession();
+  const { signOut, auth } = useSession();
+
   return (
     <Sidebar>
       <SidebarHeader className="flex-row items-center gap-4 px-4 py-3">
@@ -78,19 +77,17 @@ export function AppSidebar() {
                   </SidebarMenuItem>
                 ))
               : myChannels.map((c) => (
-                  <SidebarMenuItem
+                  <NavLink
                     key={c.id}
-                    className={`bg-sidebar-accent px-2 rounded-md `}
+                    to={`/channels/${c.id}`}
+                    className={`bg-sidebar-accent px-2 rounded-md hover:bg-accent py-2 text-sm`}
                   >
-                    <SidebarMenuButton>
-                      <NavLink
-                        to={`/channels/${c.id}`}
-                        className={`text-sidebar-accent-foreground hover:text-secondary`}
-                      >
-                        # {c.name}
-                      </NavLink>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
+                    <p
+                      className={`text-sidebar-accent-foreground :text-secondary`}
+                    >
+                      # {c.name}
+                    </p>
+                  </NavLink>
                 ))}
           </SidebarMenu>
         </SidebarGroup>
@@ -107,14 +104,13 @@ export function AppSidebar() {
           </NavLink>
         </SidebarGroup>
       </SidebarContent>
-
+      <Separator orientation={"horizontal"} className={`my-4`} />
       <SidebarFooter className="flex-row justify-between items-center">
-        <div
-          className={`bg-muted flex items-center gap-2 py-2 px-3 rounded-4xl`}
-        >
+        <div className={`bg-muted flex items-center gap-1 py-1 rounded-4xl`}>
           <UserAvatar />
-          <span>{mockCurrentUser.username}</span>
+          <span>{auth?.user.username}</span>
         </div>
+
         <Button
           aria-label={`log out`}
           variant={"link"}

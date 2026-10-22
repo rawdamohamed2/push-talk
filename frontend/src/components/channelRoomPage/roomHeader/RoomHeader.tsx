@@ -12,9 +12,9 @@ interface RoomHeaderProps {
   status: ConnectionStatus;
 }
 const RoomHeader = ({
+  onlineIds,
   channel,
   members,
-  onlineIds,
   status,
 }: RoomHeaderProps) => {
   return (
@@ -59,7 +59,7 @@ const RoomHeader = ({
             </p>
           </div>
           <Separator orientation={"vertical"} />
-          <MembersStrip members={members} onlineIds={onlineIds} />
+          <MembersStrip onlineIds={onlineIds} members={members} />
         </div>
       </div>
       <Banner />
