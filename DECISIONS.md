@@ -25,7 +25,7 @@ Each connection is independent (token in `sessionStorage`, one WebSocket per tab
 - **HTTP upload plus WebSocket events:** two channels to keep in sync. The upload response adds the message as `processing`, and `message.new` replaces it.
 - **`seq` assigned when processing ends:** order is completion order, not upload order. Every client sees the same order.
 - **Catch-up does not auto-play:** the user chooses, instead of hearing many old messages at once.
-- **Frontend focus, AI-generated backend:** confirmed by the hiring team's email. Backend tests are not written and its logs are not JSON yet.
+- **Frontend focus, AI-generated backend:** confirmed by the hiring team's email. Backend tests are not written.
 - **`sessionStorage` token and token in the WebSocket URL:** simple, but exposed to XSS and server logs. An httpOnly cookie would be safer.
 - **Presence counter in Redis without TTL:** can be stale after an API crash.
 - **A message can stay `processing`** if Redis loses the job or the worker dies.
