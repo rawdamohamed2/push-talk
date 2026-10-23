@@ -8,12 +8,19 @@ import { useChannels, useJoinChannel } from "@/hooks/queries/useChannels.ts";
 import ChannelCardLoading from "@/components/channelsPage/ChannelCardLoading.tsx";
 import { toast } from "sonner";
 import { useSearch } from "@/hooks/useSearch.ts";
+import ErrorState from "@/components/shared/ErrorState.tsx";
 
 const ChannelsPage = () => {
   const getChannelsQuery = useChannels();
   const joinChannelMutation = useJoinChannel();
   const [query, setQuery] = useState("");
-  const { data: channels, isPending, isError } = getChannelsQuery;
+  const {
+    data: channels,
+    isPending,
+    isError,
+    isFetching,
+    refetch,
+  } = getChannelsQuery;
 
   const join = (id: number) => {
     joinChannelMutation.mutate(id, {
@@ -48,8 +55,15 @@ const ChannelsPage = () => {
               <ChannelCardLoading key={i} />
             ))}
           </div>
-        ) : visibleChannels.length === 0 || isError ? (
+        ) : visibleChannels.length === 0 ? (
           <EmptyState />
+        ) : isError ? (
+          <ErrorState
+            title="Couldn't load channels"
+            message="The server didn't respond."
+            onRetry={() => void refetch()}
+            isRetrying={isFetching}
+          />
         ) : (
           <div className="grid xl:grid-cols-2 grid-cols-1 my-10 gap-6 items-center">
             {visibleChannels.map((c) => (

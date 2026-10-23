@@ -23,27 +23,50 @@ import { UseUploadMessage } from "@/hooks/queries/useUploadMessage.ts";
 import { fetchAudioBlob } from "@/api/messages.ts";
 import { useChannelSocket } from "@/hooks/useChannelSocket.ts";
 import { toQueued } from "@/lib/messageCache";
+import { ApiError } from "@/api/http.ts";
+import ErrorState from "@/components/shared/ErrorState.tsx";
 
 const ChannelRoomPage = () => {
   const { id } = useParams();
+  const channelId = Number(id);
 
-  const getChannel = useGetChannels;
+  const {
+    data: channel,
+    isPending,
+    error,
+    isFetching,
+    refetch,
+  } = useGetChannels(channelId);
 
-  const { isPending, isError, error, data: channel } = getChannel(Number(id));
+  useEffect(() => {
+    if (
+      error &&
+      !(error instanceof ApiError && error.code === "channel_not_found")
+    ) {
+      toast.error(error.message);
+    }
+  }, [error]);
 
-  if (isError) toast.error(error.message);
+  if (channel) return <ChannelRoom key={channel.id} channel={channel} />;
 
   if (isPending) return <ChannelRoomSkeleton />;
 
-  if (!channel || isError) {
+  if (
+    Number.isNaN(channelId) ||
+    (error instanceof ApiError && error.code === "channel_not_found")
+  ) {
     return (
-      <main className={`my-5 p-5`}>
-        <EmptyState isChannel={true} />
+      <main className="my-5 p-5">
+        <EmptyState isChannel />
       </main>
     );
   }
 
-  return <ChannelRoom key={channel.id} channel={channel} />;
+  return (
+    <main className="my-5 p-5">
+      <ErrorState onRetry={() => void refetch()} isRetrying={isFetching} />
+    </main>
+  );
 };
 
 function ChannelRoom({ channel }: { channel: Channel }) {
@@ -74,7 +97,7 @@ function ChannelRoom({ channel }: { channel: Channel }) {
 
   const socket = useChannelSocket(
     channel.id,
-    channel.isMember && history.isSuccess,
+    channel.isMember && history.hasLoaded,
     (message) => {
       const queued = toQueued(message);
       if (queued) queue.enqueue(queued);
@@ -113,8 +136,9 @@ function ChannelRoom({ channel }: { channel: Channel }) {
 
   if (error) toast.error(error.message);
   if (memberIsError) toast.error(memberError.message);
-  if (memberPending || memberIsError) return <ChannelRoomSkeleton />;
-  if (isLoading || error) return <ChannelRoomSkeleton />;
+  if (memberPending || members!.length === 0 || !members)
+    return <ChannelRoomSkeleton />;
+  if (isLoading && messages.length === 0) return <ChannelRoomSkeleton />;
   return (
     <main className="flex h-full flex-col">
       {!unlocked && !mutedDismissed && (

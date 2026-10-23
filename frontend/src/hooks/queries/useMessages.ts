@@ -19,11 +19,15 @@ export const useMessages = (channelId: number, enabled: boolean) => {
         ? undefined
         : (oldestPage[0]?.seq ?? undefined),
     enabled,
+    refetchOnReconnect: false,
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
     staleTime: Infinity,
   });
   const messages = (query.data?.pages ?? []).slice().reverse().flat();
   return {
     messages,
+    hasLoaded: query.data !== undefined,
     isSuccess: query.isSuccess,
     hasMore: query.hasNextPage,
     isLoadingOlder: query.isFetchingNextPage,
