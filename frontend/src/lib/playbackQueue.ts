@@ -1,18 +1,18 @@
 import type { Options, QueuedMessage } from "@/types/playQueue.type.ts";
 
 export class PlaybackQueue {
-  private pending: QueuedMessage[] = [];
-  private seen = new Set<number>();
-  private isPlaying = false;
-  private isPaused = false;
-  private playingId: number | null = null;
-  private readonly options: Options;
-  private isManuallyPaused = false;
-  private nextManual: QueuedMessage | null = null;
+    private pending: QueuedMessage[] = [];
+    private seen = new Set<number>();
+    private isPlaying = false;
+    private isPaused = false;
+    private playingId: number | null = null;
+    private readonly options: Options;
+    private isManuallyPaused = false;
+    private nextManual: QueuedMessage | null = null;
 
-  constructor(options: Options) {
-    this.options = options;
-  }
+    constructor(options: Options) {
+        this.options = options;
+    }
 
   enqueue(message: QueuedMessage): void {
     if (message.senderId === this.options.currentUserId) return;
