@@ -2,7 +2,7 @@ import axios, { AxiosError } from "axios";
 import { authStorage } from "@/lib/authStorage.ts";
 
 const BASE_URL: string =
-  import.meta.env.VITE_API_URL ?? "http://localhost:8000";
+  import.meta.env.VITE_API_URL ?? "/api";
 
 export interface FieldIssue {
   field: string;
